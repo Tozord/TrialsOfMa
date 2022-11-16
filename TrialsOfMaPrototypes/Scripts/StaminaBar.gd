@@ -1,7 +1,12 @@
 extends TextureProgress
 
-func onHealthUpdated(health,amount):
-	value = health
+func _ready():
+	pass
 
-func onMaxHealthUpdated(maxHealth):
-	max_value = maxHealth
+func  _process(delta):
+	if value <= max_value:
+		value += 1*delta
+
+func changeStamina(Change):
+	value += Change
+

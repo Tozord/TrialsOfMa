@@ -19,6 +19,8 @@ onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var playerSprite = $Sprite
 
+var staminaBar = null
+
 #Rolling
 const ROLLSPEED = 200
 var rollVector = Vector2.RIGHT
@@ -29,7 +31,8 @@ var rollVector = Vector2.RIGHT
 
 func _ready():
 	animationTree.active = true
-
+	staminaBar = get_tree().get_root().get_node("HUD")#.get_node("Interface").get_node("StaminaBar")
+	print(staminaBar)
 func _physics_process(delta):
 	
 	inputVector.x = MovementAxis("D", "A")
@@ -82,6 +85,7 @@ func moveState(delta):
 
 func rollState(_delta):
 	velocityDelta = rollVector * ROLLSPEED
+	StaminaChange(-25)
 	animationTree.set("parameters/Movement/current", 2)
 	move_and_slide(velocityDelta)
 
@@ -105,4 +109,5 @@ func MovementAxis(_posInput: String, _negInput: String):
 	return Input.get_action_strength(_posInput) - Input.get_action_strength(_negInput)
 
 func StaminaChange(_change: float):
-	pass
+	staminaBar.changeStamina(_change)
+
