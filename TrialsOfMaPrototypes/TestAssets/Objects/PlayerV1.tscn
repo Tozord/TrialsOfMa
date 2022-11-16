@@ -187,7 +187,7 @@ nodes/Movement/node = SubResource( 8 )
 nodes/Movement/position = Vector2( -413.333, 133.333 )
 nodes/Roll/node = SubResource( 10 )
 nodes/Roll/position = Vector2( -760, 253.333 )
-node_connections = [ "Movement", 0, "Idle", "Movement", 1, "Move", "Movement", 2, "Roll", "output", 0, "Movement" ]
+node_connections = [ "output", 0, "Movement", "Movement", 0, "Idle", "Movement", 1, "Move", "Movement", 2, "Roll" ]
 
 [node name="PlayerV1" type="KinematicBody2D"]
 script = ExtResource( 2 )

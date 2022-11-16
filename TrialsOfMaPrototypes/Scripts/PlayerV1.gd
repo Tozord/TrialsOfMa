@@ -31,8 +31,7 @@ var rollVector = Vector2.RIGHT
 
 func _ready():
 	animationTree.active = true
-	staminaBar = get_tree().get_root().get_node("HUD")#.get_node("Interface").get_node("StaminaBar")
-	print(staminaBar)
+	staminaBar = get_tree().get_root().get_node("GauntletV1").get_node("HUD").get_node("Interface").get_node("StaminaBar")
 func _physics_process(delta):
 	
 	inputVector.x = MovementAxis("D", "A")
@@ -79,13 +78,13 @@ func moveState(delta):
 	
 	if Input.is_action_just_pressed("Dodge"):
 		state = ROLL
+		StaminaChange(-50)
 	
 	if Input.is_action_just_pressed("Attack"):
 		state = ATTACK
 
 func rollState(_delta):
 	velocityDelta = rollVector * ROLLSPEED
-	StaminaChange(-25)
 	animationTree.set("parameters/Movement/current", 2)
 	move_and_slide(velocityDelta)
 
