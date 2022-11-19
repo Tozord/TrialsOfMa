@@ -1,4 +1,5 @@
 extends KinematicBody2D
+class_name Character
 
 #Basic Movement System
 var velocityDelta = Vector2.ZERO
@@ -18,6 +19,7 @@ var inputVector = Vector2.ZERO
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var playerSprite = $Sprite
+
 
 var staminaBar = null
 
@@ -110,3 +112,20 @@ func MovementAxis(_posInput: String, _negInput: String):
 func StaminaChange(_change: float):
 	staminaBar.changeStamina(_change)
 
+#Weapon Follows Mouse
+
+onready var sword: Node2D = get_node("Sword")
+
+func _process(_delta: float) -> void:
+	var mouse_direction: Vector2 = (get_global_mouse_position() - global_position).normalized()
+	
+	if mouse_direction.x > 0 and AnimatedSprite.flip_h:
+		AnimatedSprite.flip_h = false
+	elif mouse_direction.x < 0 and not AnimatedSprite.flip_h:
+		AnimatedSprite.flip_h = true
+		
+		sword.rotation = mouse_direction.angle()
+		if sword.scale.y == 1 and mouse_direction.x < 0:
+			sword.scale.y = -1
+		elif sword.scale.y == -1 and mouse_direction.x > 0:
+			sword.scale.y = 1
