@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://TestAssets/Sprites/Player.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/PlayerV1.gd" type="Script" id=2]
+[ext_resource path="res://TestAssets/Sprites/Sword.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4.5, 1.5 )
@@ -187,7 +188,7 @@ nodes/Movement/node = SubResource( 8 )
 nodes/Movement/position = Vector2( -413.333, 133.333 )
 nodes/Roll/node = SubResource( 10 )
 nodes/Roll/position = Vector2( -760, 253.333 )
-node_connections = [ "output", 0, "Movement", "Movement", 0, "Idle", "Movement", 1, "Move", "Movement", 2, "Roll" ]
+node_connections = [ "Movement", 0, "Idle", "Movement", 1, "Move", "Movement", 2, "Roll", "output", 0, "Movement" ]
 
 [node name="PlayerV1" type="KinematicBody2D"]
 script = ExtResource( 2 )
@@ -217,3 +218,16 @@ anims/RollRight = SubResource( 9 )
 tree_root = SubResource( 6 )
 anim_player = NodePath("../AnimationPlayer")
 parameters/Movement/current = 0
+
+[node name="Sword" type="Node2D" parent="."]
+position = Vector2( 0, -8 )
+scale = Vector2( 1, -1 )
+
+[node name="Node2D" type="Node2D" parent="Sword"]
+position = Vector2( 20, -14 )
+
+[node name="Sprite" type="Sprite" parent="Sword/Node2D"]
+position = Vector2( 0.252075, -0.0323486 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 3 )
+offset = Vector2( 6.5, -6.5 )

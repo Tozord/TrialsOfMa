@@ -39,6 +39,7 @@ func _physics_process(delta):
 	inputVector.x = MovementAxis("D", "A")
 	inputVector.y = MovementAxis("S", "W")
 	inputVector = inputVector.normalized()
+	swordDirection()
 
 	
 	match state:
@@ -72,10 +73,10 @@ func moveState(delta):
 		rollVector = inputVector
 		
 		
-	if inputVector.x > 0:
-		playerSprite.flip_h = false
-	elif inputVector.x < 0:
-		playerSprite.flip_h = true
+#	if inputVector.x > 0:
+#		playerSprite.flip_h = false
+#	elif inputVector.x < 0:
+#		playerSprite.flip_h = true
 	
 	
 	if Input.is_action_just_pressed("Dodge"):
@@ -116,16 +117,17 @@ func StaminaChange(_change: float):
 
 onready var sword: Node2D = get_node("Sword")
 
-func _process(_delta: float) -> void:
+func swordDirection():
 	var mouse_direction: Vector2 = (get_global_mouse_position() - global_position).normalized()
 	
-	if mouse_direction.x > 0 and AnimatedSprite.flip_h:
-		AnimatedSprite.flip_h = false
-	elif mouse_direction.x < 0 and not AnimatedSprite.flip_h:
-		AnimatedSprite.flip_h = true
+	if mouse_direction.x > 0 and playerSprite.flip_h:
+		playerSprite.flip_h = false
+	elif mouse_direction.x < 0 and not playerSprite.flip_h:
+		playerSprite.flip_h = true
 		
-		sword.rotation = mouse_direction.angle()
-		if sword.scale.y == 1 and mouse_direction.x < 0:
-			sword.scale.y = -1
-		elif sword.scale.y == -1 and mouse_direction.x > 0:
-			sword.scale.y = 1
+	sword.rotation = mouse_direction.angle()
+
+	if sword.scale.y == -1 and mouse_direction.x > 0:
+		sword.scale.y = 1
+	elif sword.scale.y == 1 and mouse_direction.x < 0:
+		sword.scale.y = -1
