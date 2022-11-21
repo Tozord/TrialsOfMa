@@ -1,8 +1,12 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://TestAssets/Sprites/Player.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/PlayerV1.gd" type="Script" id=2]
 [ext_resource path="res://TestAssets/Sprites/Sword.png" type="Texture" id=3]
+[ext_resource path="res://TestAssets/Sprites/HealthSquare.png" type="Texture" id=4]
+[ext_resource path="res://TestAssets/Sprites/GreenSquare.png" type="Texture" id=5]
+[ext_resource path="res://Scripts/StaminaBar.gd" type="Script" id=6]
+[ext_resource path="res://Scripts/HealthBar.gd" type="Script" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4.5, 1.5 )
@@ -104,6 +108,62 @@ tracks/2/keys = {
 "values": [ 0.0 ]
 }
 
+[sub_resource type="Animation" id=11]
+resource_name = "RollLeft"
+length = 0.5
+loop = true
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -180.0, -360.0 ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "rollAnimationFinished"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath(".:collision_mask")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.05, 0.35 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 2, 15 ]
+}
+
 [sub_resource type="Animation" id=9]
 resource_name = "RollRight"
 length = 0.5
@@ -148,16 +208,16 @@ tracks/2/keys = {
 } ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("CollisionShape2D:disabled")
+tracks/3/path = NodePath(".:collision_mask")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0, 0.5 ),
+"times": PoolRealArray( 0.05, 0.35 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
-"values": [ true, false ]
+"values": [ 2, 15 ]
 }
 
 [sub_resource type="AnimationNodeAnimation" id=7]
@@ -167,43 +227,52 @@ animation = "IdleRight"
 animation = "MoveRight"
 
 [sub_resource type="AnimationNodeTransition" id=8]
-input_count = 3
+input_count = 4
 input_0/name = "Idle"
 input_0/auto_advance = false
 input_1/name = "Move"
 input_1/auto_advance = false
-input_2/name = "Roll"
+input_2/name = "Roll Right"
 input_2/auto_advance = false
+input_3/name = "Roll Left"
+input_3/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+animation = "RollLeft"
 
 [sub_resource type="AnimationNodeAnimation" id=10]
 animation = "RollRight"
 
 [sub_resource type="AnimationNodeBlendTree" id=6]
-graph_offset = Vector2( -1268.16, -58.7569 )
+graph_offset = Vector2( -1194.97, 118.482 )
 nodes/Idle/node = SubResource( 7 )
 nodes/Idle/position = Vector2( -760, 26.6667 )
 nodes/Move/node = SubResource( 5 )
 nodes/Move/position = Vector2( -773.333, 133.333 )
 nodes/Movement/node = SubResource( 8 )
 nodes/Movement/position = Vector2( -413.333, 133.333 )
-nodes/Roll/node = SubResource( 10 )
-nodes/Roll/position = Vector2( -760, 253.333 )
-node_connections = [ "Movement", 0, "Idle", "Movement", 1, "Move", "Movement", 2, "Roll", "output", 0, "Movement" ]
+nodes/RollLeft/node = SubResource( 12 )
+nodes/RollLeft/position = Vector2( -760, 386.667 )
+nodes/RollRight/node = SubResource( 10 )
+nodes/RollRight/position = Vector2( -760, 253.333 )
+node_connections = [ "Movement", 0, "Idle", "Movement", 1, "Move", "Movement", 2, "RollRight", "Movement", 3, "RollLeft", "output", 0, "Movement" ]
+
+[sub_resource type="RectangleShape2D" id=13]
+extents = Vector2( 4.5962, 13.435 )
 
 [node name="PlayerV1" type="KinematicBody2D"]
+collision_mask = 15
 script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -7 )
+position = Vector2( 0, -7.5 )
 scale = Vector2( 5, 5 )
 shape = SubResource( 1 )
-disabled = true
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( -1.35525e-20, -7 )
 scale = Vector2( 3.75, 3.75 )
 texture = ExtResource( 1 )
-offset = Vector2( 0, -6 )
+offset = Vector2( 0, -8 )
 flip_h = true
 hframes = 4
 frame = 2
@@ -212,6 +281,7 @@ frame = 2
 anims/IdleRight = SubResource( 2 )
 anims/MoveRight = SubResource( 3 )
 anims/RESET = SubResource( 4 )
+anims/RollLeft = SubResource( 11 )
 anims/RollRight = SubResource( 9 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -223,11 +293,65 @@ parameters/Movement/current = 0
 position = Vector2( 0, -8 )
 scale = Vector2( 1, -1 )
 
-[node name="Node2D" type="Node2D" parent="Sword"]
+[node name="SwordTrue" type="KinematicBody2D" parent="Sword"]
 position = Vector2( 20, -14 )
+collision_layer = 13
 
-[node name="Sprite" type="Sprite" parent="Sword/Node2D"]
+[node name="Sprite" type="Sprite" parent="Sword/SwordTrue"]
 position = Vector2( 0.252075, -0.0323486 )
 scale = Vector2( 2, 2 )
 texture = ExtResource( 3 )
 offset = Vector2( 6.5, -6.5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/SwordTrue"]
+position = Vector2( 20.25, -19.75 )
+rotation = 0.785398
+shape = SubResource( 13 )
+
+[node name="Interface" type="Control" parent="."]
+margin_left = -640.0
+margin_top = -375.0
+margin_right = -600.0
+margin_bottom = -335.0
+
+[node name="StaminaBar" type="TextureProgress" parent="Interface"]
+anchor_left = 0.2
+anchor_top = 0.85
+anchor_right = 0.2
+anchor_bottom = 0.85
+margin_right = 16.0
+margin_bottom = 16.0
+rect_scale = Vector2( 8, 1 )
+max_value = 200.0
+value = 200.0
+texture_progress = ExtResource( 5 )
+script = ExtResource( 6 )
+regenAmount = 10.0
+
+[node name="RegenTimer" type="Timer" parent="Interface/StaminaBar"]
+wait_time = 0.125
+one_shot = true
+autostart = true
+
+[node name="InitialCooldown" type="Timer" parent="Interface/StaminaBar"]
+wait_time = 2.0
+one_shot = true
+
+[node name="HealthBar" type="TextureProgress" parent="Interface"]
+anchor_left = 0.175
+anchor_top = 0.225
+anchor_right = 0.175
+anchor_bottom = 0.225
+margin_right = 16.0
+margin_bottom = 16.0
+rect_scale = Vector2( 6, 1 )
+value = 100.0
+texture_progress = ExtResource( 4 )
+script = ExtResource( 7 )
+
+[node name="RegenTimer" type="Timer" parent="Interface/HealthBar"]
+wait_time = 0.5
+one_shot = true
+autostart = true
+
+[node name="InitalCooldown" type="Timer" parent="Interface/HealthBar"]
